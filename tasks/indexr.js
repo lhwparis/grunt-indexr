@@ -27,7 +27,7 @@ module.exports = function (grunt) {
 	
 	var parse = parseSetup(options.meta_data_separator);
 
-    var templateList = [];
+    var templateList = {};
     // Iterate over all specified file groups.
     this.files.forEach(function (file) {
       // Concat specified files.
@@ -40,7 +40,16 @@ module.exports = function (grunt) {
         } else {
 		  var readHeader = _.compose(parse.header, grunt.file.read);
 		  var header  = readHeader(filepath);
-		  templateList.push({fileName:filepath, readName: filepath, header: header});
+		  
+		  filepathSplit = filepath.split('.');
+		  if(filepathSplit.length !== 3) {
+			filepathSplit.unshift("");
+		  }
+		  if(typeof templateList[filepathSplit[0]] === 'undefined') {
+			templateList[filepathSplit[0]] = [];
+		  }
+		  
+		  templateList[filepathSplit[0]].push({fileName:filepath, readName: filepathSplit[1], header: header});
           return true;
         }
       });
