@@ -52,7 +52,7 @@ module.exports = function (grunt) {
       var template = dot.template(src);
       var output = template(_.extend({}, {testx: templateList}));
 
-      grunt.file.write('tmp/index.html', output);
+      grunt.file.write('.tmp/index.html', output);
   });
 
 };
