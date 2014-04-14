@@ -27,7 +27,8 @@ module.exports = function (grunt) {
 	
 	var parse = parseSetup(options.meta_data_separator);
 
-    var templateList = {};
+    var templateList = [];
+	var keyMap = {};
     // Iterate over all specified file groups.
     this.files.forEach(function (file) {
       // Concat specified files.
@@ -41,15 +42,17 @@ module.exports = function (grunt) {
 		  var readHeader = _.compose(parse.header, grunt.file.read);
 		  var header  = readHeader(filepath);
 		  
-		  filepathSplit = filepath.split('.');
+		  var filepathSplit = filepath.split('/');
+		  filepathSplit = _.last(filepathSplit).split('.');
 		  if(filepathSplit.length !== 3) {
-			filepathSplit.unshift("");
+			filepathSplit.unshift("x");
 		  }
-		  if(typeof templateList[filepathSplit[0]] === 'undefined') {
-			templateList[filepathSplit[0]] = [];
+		  if(typeof keyMap[filepathSplit[0]] === 'undefined') {
+			keyMap[filepathSplit[0]] = templateList.length;
+			templateList[keyMap[filepathSplit[0]]] = { name: filepathSplit[0], namespaceDescription: (typeof header.namespaceDescription === 'undefined') ? "" : header.namespaceDescription,  items: []};
+			grunt.log.warn(templateList[keyMap[filepathSplit[0]]].name);
 		  }
-		  
-		  templateList[filepathSplit[0]].push({fileName:filepath, readName: filepathSplit[1], header: header});
+		  templateList[keyMap[filepathSplit[0]]].items.push({fileName:filepath, readName: filepathSplit[1], header: header});
           return true;
         }
       });
@@ -59,7 +62,7 @@ module.exports = function (grunt) {
       //var settings = _.extend({}, dot.templateSettings, template_settings);
       var src = grunt.file.read(options.template);
       var template = dot.template(src);
-      var output = template(_.extend({}, {testx: templateList}));
+      var output = template(_.extend({}, {indexr: templateList}));
 
       grunt.file.write('.tmp/index.html', output);
   });
