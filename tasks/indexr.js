@@ -21,8 +21,6 @@ module.exports = function (grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', ',
       template: false,
 	  meta_data_separator: /\r?\n\r?\n/
     });
@@ -50,7 +48,7 @@ module.exports = function (grunt) {
     });
       var templateSettings = {};
       //var settings = _.extend({}, dot.templateSettings, template_settings);
-      var src = grunt.file.read('test3.dot.html');
+      var src = grunt.file.read(options.template);
       var template = dot.template(src);
       var output = template(_.extend({}, {testx: templateList}));
 
