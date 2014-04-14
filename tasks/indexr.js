@@ -50,7 +50,6 @@ module.exports = function (grunt) {
 		  if(typeof keyMap[filepathSplit[0]] === 'undefined') {
 			keyMap[filepathSplit[0]] = templateList.length;
 			templateList[keyMap[filepathSplit[0]]] = { name: filepathSplit[0], namespaceDescription: (typeof header.namespaceDescription === 'undefined') ? "" : header.namespaceDescription,  items: []};
-			grunt.log.warn(templateList[keyMap[filepathSplit[0]]].name);
 		  }
 		  templateList[keyMap[filepathSplit[0]]].items.push({fileName:filepath, readName: filepathSplit[1], header: header});
           return true;
