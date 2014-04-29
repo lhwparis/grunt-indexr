@@ -22,13 +22,14 @@ module.exports = function (grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       template: false,
-	  meta_data_separator: /\r?\n\r?\n/
+	    meta_data_separator: /\r?\n\r?\n/,
+      replaceInFilePath: ""
     });
 	
 	var parse = parseSetup(options.meta_data_separator);
 
     var templateList = [];
-	var keyMap = {};
+	  var keyMap = {};
     // Iterate over all specified file groups.
     this.files.forEach(function (file) {
       // Concat specified files.
@@ -45,13 +46,13 @@ module.exports = function (grunt) {
 		  var filepathSplit = filepath.split('/');
 		  filepathSplit = _.last(filepathSplit).split('.');
 		  if(filepathSplit.length !== 3) {
-			filepathSplit.unshift("x");
+			  filepathSplit.unshift("x");
 		  }
 		  if(typeof keyMap[filepathSplit[0]] === 'undefined') {
 			keyMap[filepathSplit[0]] = templateList.length;
 			templateList[keyMap[filepathSplit[0]]] = { name: filepathSplit[0], namespaceDescription: (typeof header.namespaceDescription === 'undefined') ? "" : header.namespaceDescription,  items: []};
 		  }
-		  templateList[keyMap[filepathSplit[0]]].items.push({fileName:filepath, readName: filepathSplit[1], header: header});
+		  templateList[keyMap[filepathSplit[0]]].items.push({fileName:filepath.replace(options.replaceInFilePath, ''), readName: filepathSplit[1], header: header});
           return true;
         }
       });
