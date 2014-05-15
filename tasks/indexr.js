@@ -17,7 +17,7 @@ module.exports = function (grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('indexr', 'generates a index.html file with all your templates ', function () {
+  grunt.registerMultiTask('indexr', 'generates a index.html overview for static templates', function () {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
@@ -58,10 +58,11 @@ module.exports = function (grunt) {
       });
 
     });
-      var templateSettings = {};
-      //var settings = _.extend({}, dot.templateSettings, template_settings);
+      var templateSettings = {
+		strip: false
+	  };
       var src = grunt.file.read(options.template);
-      var template = dot.template(src);
+      var template = dot.template(src, templateSettings);
       var output = template(_.extend({}, {indexr: templateList}));
 
       grunt.file.write('.tmp/index.html', output);
