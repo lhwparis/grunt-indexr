@@ -61,8 +61,9 @@ module.exports = function (grunt) {
       var templateSettings = {
 		strip: false
 	  };
+	  var settings = _.extend({}, dot.templateSettings, templateSettings);
       var src = grunt.file.read(options.template);
-      var template = dot.template(src, templateSettings);
+      var template = dot.template(src, settings);
       var output = template(_.extend({}, {indexr: templateList}));
 
       grunt.file.write('.tmp/index.html', output);
